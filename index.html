@@ -15,6 +15,12 @@
     <nav class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container-fluid px-4">
             <span class="navbar-brand mb-0 h1"><i class="fa-solid fa-dumbbell text-warning me-2"></i>FitCRM</span>
+            <div class="d-flex ms-auto me-3">
+    <div class="input-group">
+        <span class="input-group-text bg-secondary border-0 text-white"><i class="fa-solid fa-search"></i></span>
+        <input type="text" id="filtro-busca" class="form-control bg-dark text-white border-0" placeholder="Buscar aluno..." style="--bs-bg-opacity: .2;">
+    </div>
+</div>
             <button class="btn btn-warning btn-sm" onclick="abrirModalNovo()"><i class="fa-solid fa-plus"></i> Novo Aluno</button>
         </div>
     </nav>
@@ -70,4 +76,5 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="script.js"></script>
 </body>
+
 </html>
