@@ -75,6 +75,58 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="script.js"></script>
+    <div class="modal fade" id="modalDetalhes" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Detalhes do Aluno</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-5 border-end">
+                        <input type="hidden" id="edit-id">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nome</label>
+                            <input type="text" id="edit-nome" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Telefone</label>
+                            <input type="text" id="edit-telefone" class="form-control">
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label fw-bold">Valor (R$)</label>
+                                <input type="text" id="edit-valor" class="form-control">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label fw-bold">Tag</label>
+                                <input type="text" id="edit-tag" class="form-control">
+                            </div>
+                        </div>
+                        <button class="btn btn-success w-100" onclick="salvarEdicao()">
+                            <i class="fa-solid fa-save"></i> Salvar Dados
+                        </button>
+                    </div>
+
+                    <div class="col-md-7">
+                        <h6 class="fw-bold mb-3"><i class="fa-solid fa-history"></i> Histórico de Conversas</h6>
+                        
+                        <div id="lista-historico" class="bg-light p-2 rounded mb-3 border" style="height: 250px; overflow-y: auto;">
+                            <p class="text-muted text-center mt-5">Nenhum histórico ainda.</p>
+                        </div>
+
+                        <div class="input-group">
+                            <input type="text" id="nova-nota" class="form-control" placeholder="Ex: Liguei e ele pediu para retornar amanhã...">
+                            <button class="btn btn-primary" onclick="adicionarNota()">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>
+
