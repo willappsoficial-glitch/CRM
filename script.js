@@ -1,20 +1,18 @@
-// ⚠️ NÃO ESQUEÇA DE COLAR SUA URL DO APPS SCRIPT AQUI NOVAMENTE
+// ⚠️ COLE SUA URL DO APPS SCRIPT AQUI (Não esqueça!)
 const API_URL = 'https://script.google.com/macros/s/AKfycbyucoF9SXVKo_b49sg2-CC-jsGSpLhTxVtn9VZzr10oa21jSB91DXLEYn9L_D25U6vW/exec'; 
 
 // --- INICIALIZAÇÃO ---
-// Isso roda assim que a tela abre
 document.addEventListener('DOMContentLoaded', () => {
     carregarLeads();
     configurarDragAndDrop();
 });
 
-// --- FUNÇÕES GLOBAIS (Agora o HTML consegue ver estas funções) ---
+// --- FUNÇÕES GLOBAIS ---
 
 // 1. Abrir Modal de Novo Aluno
 async function abrirModalNovo() {
-    // Verifica se o SweetAlert carregou
     if (typeof Swal === 'undefined') {
-        alert("Erro: A biblioteca SweetAlert não carregou. Verifique sua internet.");
+        alert("Erro: A biblioteca SweetAlert não carregou.");
         return;
     }
 
@@ -25,78 +23,40 @@ async function abrirModalNovo() {
             '<input id="swal-tel" class="swal2-input" placeholder="Telefone (55...)">' +
             '<input id="swal-tag" class="swal2-input" placeholder="Tag (Ex: Musculação)">',
         focusConfirm: false,
-        showCancelButton: true, // Adicionei botão de cancelar
+        showCancelButton: true,
         confirmButtonText: 'Salvar',
         cancelButtonText: 'Cancelar',
         preConfirm: () => {
-            const nome = document.getElementById('swal-nome').value;
-            const telefone = document.getElementById('swal-tel').value;
-            
-            if (!nome) {
-                Swal.showValidationMessage('O nome é obrigatório');
-            }
-            
             return {
-                nome: nome,
-                telefone: telefone,
+                nome: document.getElementById('swal-nome').value,
+                telefone: document.getElementById('swal-tel').value,
                 tags: document.getElementById('swal-tag').value,
-                valor: '100,00' // Valor padrão, pode mudar depois
+                valor: '100,00'
             }
         }
     });
 
     if (formValues) {
-        // 1. Feedback visual imediato (Otimista)
-        const tempId = Date.now().toString(); // ID temporário
-        criarCardNaTela({ ...formValues, id: tempId, status: 'Novo' });
+        // Feedback visual imediato
+        const tempId = Date.now().toString();
+        criarCardNaTela({ ...formValues, id: tempId, status: 'Novo' }); // AQUI ESTAVA O ERRO ANTIGO
         atualizarContadores();
         
-        // 2. Salva no Banco de Dados (Apps Script)
+        // Salva no Banco
         try {
             await fetch(API_URL, {
                 method: 'POST',
                 body: JSON.stringify({ acao: 'criar', lead: formValues })
             });
-            console.log("Salvo no Google Sheets!");
         } catch (error) {
             console.error("Erro ao salvar:", error);
-            Swal.fire('Erro', 'Não foi possível salvar na planilha.', 'error');
         }
     }
 }
 
-// 2. Configura o SortableJS (Arrasta e Solta)
-function configurarDragAndDrop() {
-    const colunas = document.querySelectorAll('.kanban-list');
-    
-    colunas.forEach(coluna => {
-        // Verifica se Sortable carregou
-        if (typeof Sortable === 'undefined') return;
-
-        new Sortable(coluna, {
-            group: 'crm-pipeline', 
-            animation: 150,
-            ghostClass: 'sortable-ghost',
-            onEnd: function (evt) {
-                const item = evt.item;
-                const novoStatus = evt.to.getAttribute('data-status');
-                const idLead = item.getAttribute('data-id');
-                
-                if (evt.from !== evt.to) {
-                    atualizarStatusNoBanco(idLead, novoStatus);
-                    atualizarContadores();
-                }
-            }
-        });
-    });
-}
-
-// 3. Busca dados da API
+// 2. Busca dados da API
 function carregarLeads() {
-    // Mostra loading apenas se Swal estiver carregado
-    if (typeof Swal !== 'undefined') {
-        Swal.fire({title: 'Carregando...', didOpen: () => Swal.showLoading()});
-    }
+    if (typeof Swal !== 'undefined') Swal.fire({title: 'Carregando...', didOpen: () => Swal.showLoading()});
     
     fetch(API_URL)
         .then(response => response.json())
@@ -105,21 +65,19 @@ function carregarLeads() {
             
             if(json.status === 'sucesso') {
                 limparColunas();
-                json.dados.forEach(lead => criarCardNaTela(lead));
+                // O ERRO ESTAVA AQUI: Antes chamava renderizarCards, agora é criarCardNaTela
+                json.dados.forEach(lead => criarCardNaTela(lead)); 
                 atualizarContadores();
-            } else {
-                console.error('Erro no Backend:', json.mensagem);
             }
         })
         .catch(erro => {
             console.error(erro);
-            if (typeof Swal !== 'undefined') Swal.fire('Erro', 'Falha ao conectar com a planilha.', 'error');
+            if (typeof Swal !== 'undefined') Swal.fire('Erro', 'Falha ao conectar.', 'error');
         });
 }
 
-// 4. Renderiza o Card HTML
+// 3. Renderiza o Card HTML
 function criarCardNaTela(lead) {
-    // Se o status não existir no HTML, joga para 'Novo'
     const coluna = document.getElementById(lead.status) || document.getElementById('Novo');
     
     const card = document.createElement('div');
@@ -137,7 +95,7 @@ function criarCardNaTela(lead) {
         <div class="d-flex justify-content-between align-items-center mt-2 border-top pt-2">
             <span class="fw-bold text-success">R$ ${lead.valor || '0,00'}</span>
             <div>
-                <button class="btn btn-sm btn-outline-success border-0" onclick="abrirWhatsApp('${lead.telefone}', '${lead.nome}')" title="Chamar no Zap">
+                <button class="btn btn-sm btn-outline-success border-0" onclick="abrirWhatsApp('${lead.telefone}', '${lead.nome}')">
                     <i class="fab fa-whatsapp fa-lg"></i>
                 </button>
                 <button class="btn btn-sm btn-outline-danger border-0" onclick="deletarLead('${lead.id}')">
@@ -147,60 +105,63 @@ function criarCardNaTela(lead) {
         </div>
     `;
     
-    coluna.appendChild(card);
+    if(coluna) coluna.appendChild(card);
 }
 
-// 5. Salva Movimentação
+// 4. Configura Drag and Drop
+function configurarDragAndDrop() {
+    const colunas = document.querySelectorAll('.kanban-list');
+    colunas.forEach(coluna => {
+        if (typeof Sortable === 'undefined') return;
+        new Sortable(coluna, {
+            group: 'crm-pipeline', 
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            onEnd: function (evt) {
+                if (evt.from !== evt.to) {
+                    const item = evt.item;
+                    const novoStatus = evt.to.getAttribute('data-status');
+                    const idLead = item.getAttribute('data-id');
+                    atualizarStatusNoBanco(idLead, novoStatus);
+                    atualizarContadores();
+                }
+            }
+        });
+    });
+}
+
+// 5. Salva Status
 function atualizarStatusNoBanco(id, status) {
     fetch(API_URL, {
         method: 'POST',
         body: JSON.stringify({ acao: 'mover', id: id, novoStatus: status })
-    }).then(r => console.log("Status atualizado"));
+    });
 }
 
-// 6. Abrir WhatsApp
-function abrirWhatsApp(tel, nome) {
-    if (!tel) {
-        alert("Cliente sem telefone cadastrado.");
-        return;
-    }
-    // Remove caracteres não numéricos
-    const telLimpo = tel.toString().replace(/\D/g, ''); 
-    const texto = `Olá ${nome}, tudo bem? Sou da academia...`;
-    window.open(`https://wa.me/55${telLimpo}?text=${encodeURIComponent(texto)}`, '_blank');
-}
-
-// 7. Deletar Lead
+// 6. Deletar e Utils
 function deletarLead(id) {
-    Swal.fire({
-        title: 'Tem certeza?',
-        text: "Apagar este aluno?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sim, apagar!',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const card = document.querySelector(`[data-id="${id}"]`);
-            if (card) card.remove();
-            
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ acao: 'apagar', id: id })
-            });
-            atualizarContadores();
-        }
-    })
+    if(confirm("Tem certeza?")) {
+        document.querySelector(`[data-id="${id}"]`).remove();
+        fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({ acao: 'apagar', id: id })
+        });
+        atualizarContadores();
+    }
 }
 
-// 8. Utilitários
+function abrirWhatsApp(tel, nome) {
+    if(!tel) return alert("Sem telefone");
+    const telLimpo = tel.toString().replace(/\D/g, ''); 
+    window.open(`https://wa.me/55${telLimpo}?text=Ola ${nome}`, '_blank');
+}
+
 function limparColunas() {
     document.querySelectorAll('.kanban-list').forEach(c => c.innerHTML = '');
 }
 
 function atualizarContadores() {
     document.querySelectorAll('.kanban-column').forEach(col => {
-        const count = col.querySelectorAll('.kanban-card').length;
-        col.querySelector('.count-badge').innerText = count;
+        col.querySelector('.count-badge').innerText = col.querySelectorAll('.kanban-card').length;
     });
 }
