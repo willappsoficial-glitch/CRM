@@ -1,5 +1,5 @@
 // A URL que você copiou do Apps Script
-const API_URL = 'https://script.google.com/macros/library/d/1TPuRJc1b90wS25TNxYPpkHf3mupVE3HN9CDwpv2Jh0FIorKYwtvfFL_i/2';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyucoF9SXVKo_b49sg2-CC-jsGSpLhTxVtn9VZzr10oa21jSB91DXLEYn9L_D25U6vW/exec';
 
 // Função para buscar os Leads e montar o Kanban
 async function carregarKanban() {
@@ -37,4 +37,5 @@ async function atualizarStatusNoBanco(idLead, novoStatus) {
 }
 
 // Inicializa
+
 carregarKanban();
