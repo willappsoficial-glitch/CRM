@@ -165,3 +165,19 @@ function atualizarContadores() {
         col.querySelector('.count-badge').innerText = col.querySelectorAll('.kanban-card').length;
     });
 }
+
+// Adicione este evento no final do seu script
+document.getElementById('filtro-busca').addEventListener('keyup', function(e) {
+    const termo = e.target.value.toLowerCase();
+    const cards = document.querySelectorAll('.kanban-card');
+
+    cards.forEach(card => {
+        const nome = card.querySelector('.fw-bold').innerText.toLowerCase();
+        // Se o nome não bate com a busca, esconde o card
+        if (nome.includes(termo)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
