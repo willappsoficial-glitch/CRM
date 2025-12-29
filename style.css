@@ -1,0 +1,76 @@
+/* Fundo Geral */
+body {
+    background-color: #f4f6f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100vh;
+    overflow: hidden; /* Kanban rola horizontalmente se necessário */
+}
+
+/* Colunas do Kanban */
+.kanban-column {
+    background-color: #ebecf0;
+    min-height: 70vh;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.kanban-list {
+    flex-grow: 1;
+    overflow-y: auto; /* Scroll vertical dentro da coluna */
+    min-height: 100px;
+}
+
+/* Cards (Bloquinhos) */
+.kanban-card {
+    background: white;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    cursor: grab;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-left: 4px solid transparent;
+}
+
+.kanban-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.kanban-card:active {
+    cursor: grabbing;
+}
+
+/* Cores da borda lateral baseada no status (opcional) */
+.kanban-card.novo { border-left-color: #0d6efd; }
+.kanban-card.atencao { border-left-color: #ffc107; }
+
+/* Ghost Class (O espaço cinza quando você arrasta) */
+.sortable-ghost {
+    background-color: #e2e4ea;
+    border: 2px dashed #cbd0d8;
+    color: transparent;
+    box-shadow: none;
+}
+
+/* Tags coloridas */
+.card-tag {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+/* Scrollbar Bonita */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
