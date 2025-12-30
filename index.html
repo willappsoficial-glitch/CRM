@@ -22,6 +22,9 @@
                 </div>
             </div>
 
+            <button class="btn btn-info btn-sm me-2 text-white" onclick="abrirPainelRetencao()">
+                <i class="fa-solid fa-bullhorn"></i> Ações do Dia
+            </button>
             <button class="btn btn-outline-light btn-sm me-2" onclick="abrirDashboard()">
                 <i class="fa-solid fa-chart-pie"></i> Dashboard
             </button>
@@ -33,7 +36,6 @@
 
     <div class="container-fluid py-4 h-100">
         <div class="row flex-nowrap overflow-auto pb-4" id="kanban-container">
-            
             <div class="col-md-3 col-10">
                 <div class="kanban-column shadow-sm rounded-3 bg-white h-100">
                     <div class="p-3 border-bottom border-3 border-primary d-flex justify-content-between align-items-center">
@@ -73,7 +75,6 @@
                     <div class="kanban-list p-2" id="Fechado" data-status="Fechado"></div>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -96,6 +97,10 @@
                                 <label class="form-label fw-bold">Telefone</label>
                                 <input type="text" id="edit-telefone" class="form-control">
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Data de Nascimento</label>
+                                <input type="date" id="edit-nasc" class="form-control">
+                            </div>
                             <div class="row">
                                 <div class="col-6 mb-3">
                                     <label class="form-label fw-bold">Valor (R$)</label>
@@ -111,12 +116,12 @@
                             </button>
                         </div>
                         <div class="col-md-7">
-                            <h6 class="fw-bold mb-3"><i class="fa-solid fa-history"></i> Histórico de Conversas</h6>
+                            <h6 class="fw-bold mb-3"><i class="fa-solid fa-history"></i> Histórico</h6>
                             <div id="lista-historico" class="bg-light p-2 rounded mb-3 border" style="height: 250px; overflow-y: auto;">
                                 <p class="text-muted text-center mt-5">Nenhum histórico ainda.</p>
                             </div>
                             <div class="input-group">
-                                <input type="text" id="nova-nota" class="form-control" placeholder="Ex: Liguei e ele pediu para retornar amanhã...">
+                                <input type="text" id="nova-nota" class="form-control" placeholder="Escreva uma nota...">
                                 <button class="btn btn-primary" onclick="adicionarNota()">Adicionar</button>
                             </div>
                         </div>
@@ -182,6 +187,31 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalRetencao" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-bullhorn"></i> Painel de Missões Diárias</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs nav-fill mb-3" id="tabRetencao" role="tablist">
+                        <li class="nav-item"><button class="nav-link active fw-bold" data-bs-toggle="tab" data-bs-target="#tab-niver" type="button">🎂 Aniversariantes <span id="badge-niver" class="badge bg-danger rounded-pill">0</span></button></li>
+                        <li class="nav-item"><button class="nav-link fw-bold" data-bs-toggle="tab" data-bs-target="#tab-ausente" type="button">🚨 Ausentes <span id="badge-ausente" class="badge bg-danger rounded-pill">0</span></button></li>
+                        <li class="nav-item"><button class="nav-link fw-bold" data-bs-toggle="tab" data-bs-target="#tab-vencido" type="button">💲 Cobrança <span id="badge-vencido" class="badge bg-danger rounded-pill">0</span></button></li>
+                        <li class="nav-item"><button class="nav-link fw-bold" data-bs-toggle="tab" data-bs-target="#tab-novos" type="button">🌱 Novos Alunos <span id="badge-novos" class="badge bg-danger rounded-pill">0</span></button></li>
+                    </ul>
+                    <div class="tab-content" id="tabContentRetencao">
+                        <div class="tab-pane fade show active" id="tab-niver"><div id="lista-niver" class="list-group"><p class="text-center text-muted mt-3">Carregando...</p></div></div>
+                        <div class="tab-pane fade" id="tab-ausente"><div id="lista-ausente" class="list-group"></div></div>
+                        <div class="tab-pane fade" id="tab-vencido"><div id="lista-vencido" class="list-group"></div></div>
+                        <div class="tab-pane fade" id="tab-novos"><div id="lista-novos" class="list-group"></div></div>
                     </div>
                 </div>
             </div>
