@@ -95,7 +95,45 @@ function criarCardNaTela(lead) {
     coluna.appendChild(card);
 }
 
-// --- FUNÇÕES DO MODAL E EDIÇÃO ---
+// --- FUNÇÕES GERAIS ---
+
+function abrirModalNovo() {
+    Swal.fire({
+        title: 'Novo Aluno',
+        html:
+            '<input id="swal-nome" class="swal2-input" placeholder="Nome">' +
+            '<input id="swal-tel" class="swal2-input" placeholder="Telefone (55...)">' +
+            '<div class="mt-3 text-start px-5"><label class="small text-muted">Data de Nascimento:</label>' +
+            '<input id="swal-nasc" type="date" class="swal2-input mt-0" placeholder="Nascimento"></div>' +
+            '<input id="swal-tag" class="swal2-input" placeholder="Tag (ex: Musculação)">',
+        focusConfirm: false,
+        preConfirm: () => {
+            return {
+                nome: document.getElementById('swal-nome').value,
+                telefone: document.getElementById('swal-tel').value,
+                nascimento: document.getElementById('swal-nasc').value, // CAMPO NOVO
+                tags: document.getElementById('swal-tag').value,
+                valor: '0,00',
+                historico: []
+            }
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const formValues = result.value;
+            const tempId = Date.now(); 
+            const novoLead = { ...formValues, id: tempId, status: 'Novo', data: new Date() };
+            
+            cacheLeads.push(novoLead);
+            criarCardNaTela(novoLead);
+            atualizarContadores();
+            
+            fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ acao: 'criar', lead: formValues })
+            });
+        }
+    });
+}
 
 function abrirModalDetalhes(id) {
     const lead = cacheLeads.find(l => l.id == id);
@@ -106,10 +144,61 @@ function abrirModalDetalhes(id) {
     document.getElementById('edit-telefone').value = lead.telefone;
     document.getElementById('edit-valor').value = lead.valor;
     document.getElementById('edit-tag').value = lead.tags;
+    
+    // Preenche Data Nascimento
+    if(lead.nascimento) {
+        let dataFmt = lead.nascimento.toString().substring(0, 10); 
+        document.getElementById('edit-nasc').value = dataFmt;
+    } else {
+        document.getElementById('edit-nasc').value = '';
+    }
+
     renderizarHistorico(lead.historico || []);
 
     const modal = new bootstrap.Modal(document.getElementById('modalDetalhes'));
     modal.show();
+}
+
+function salvarEdicao(silencioso = false) {
+    const id = document.getElementById('edit-id').value;
+    const lead = cacheLeads.find(l => l.id == id);
+
+    lead.nome = document.getElementById('edit-nome').value;
+    lead.telefone = document.getElementById('edit-telefone').value;
+    lead.valor = document.getElementById('edit-valor').value;
+    lead.tags = document.getElementById('edit-tag').value;
+    lead.nascimento = document.getElementById('edit-nasc').value; // SALVA NASCIMENTO
+
+    // Atualiza visualmente
+    const card = document.querySelector(`.kanban-card[data-id="${id}"]`);
+    if(card) {
+        card.querySelector('.nome-aluno').innerText = lead.nome;
+        card.querySelector('.tag-aluno').innerText = lead.tags;
+        card.querySelector('.valor-aluno').innerText = 'R$ ' + lead.valor;
+    }
+
+    if (!silencioso) {
+        const modalEl = document.getElementById('modalDetalhes');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
+        Swal.fire({title: 'Salvo!', icon: 'success', timer: 1500, showConfirmButton: false});
+    }
+
+    fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify({ 
+            acao: 'editar', 
+            id: id, 
+            lead: { 
+                nome: lead.nome, 
+                telefone: lead.telefone, 
+                valor: lead.valor, 
+                tags: lead.tags, 
+                historico: lead.historico,
+                nascimento: lead.nascimento
+            } 
+        })
+    });
 }
 
 function renderizarHistorico(historico) {
@@ -140,64 +229,6 @@ function adicionarNota() {
     renderizarHistorico(lead.historico);
     input.value = '';
     salvarEdicao(true); 
-}
-
-function salvarEdicao(silencioso = false) {
-    const id = document.getElementById('edit-id').value;
-    const lead = cacheLeads.find(l => l.id == id);
-
-    lead.nome = document.getElementById('edit-nome').value;
-    lead.telefone = document.getElementById('edit-telefone').value;
-    lead.valor = document.getElementById('edit-valor').value;
-    lead.tags = document.getElementById('edit-tag').value;
-    
-    const card = document.querySelector(`.kanban-card[data-id="${id}"]`);
-    if(card) {
-        card.querySelector('.nome-aluno').innerText = lead.nome;
-        card.querySelector('.tag-aluno').innerText = lead.tags;
-        card.querySelector('.valor-aluno').innerText = 'R$ ' + lead.valor;
-    }
-
-    if (!silencioso) {
-        const modalEl = document.getElementById('modalDetalhes');
-        const modal = bootstrap.Modal.getInstance(modalEl);
-        modal.hide();
-        Swal.fire({title: 'Salvo!', icon: 'success', timer: 1500, showConfirmButton: false});
-    }
-
-    fetch(API_URL, {
-        method: 'POST',
-        body: JSON.stringify({ acao: 'editar', id: id, lead: { nome: lead.nome, telefone: lead.telefone, valor: lead.valor, tags: lead.tags, historico: lead.historico } })
-    });
-}
-
-// --- FUNÇÕES GERAIS ---
-
-function abrirModalNovo() {
-    Swal.fire({
-        title: 'Novo Aluno',
-        html: '<input id="swal-nome" class="swal2-input" placeholder="Nome"><input id="swal-tel" class="swal2-input" placeholder="Telefone"><input id="swal-tag" class="swal2-input" placeholder="Tag">',
-        focusConfirm: false,
-        preConfirm: () => {
-            return {
-                nome: document.getElementById('swal-nome').value,
-                telefone: document.getElementById('swal-tel').value,
-                tags: document.getElementById('swal-tag').value,
-                valor: '0,00',
-                historico: []
-            }
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const formValues = result.value;
-            const tempId = Date.now(); 
-            const novoLead = { ...formValues, id: tempId, status: 'Novo', data: new Date() };
-            cacheLeads.push(novoLead);
-            criarCardNaTela(novoLead);
-            atualizarContadores();
-            fetch(API_URL, { method: 'POST', body: JSON.stringify({ acao: 'criar', lead: formValues }) });
-        }
-    });
 }
 
 function atualizarStatusNoBanco(id, status) {
@@ -235,9 +266,9 @@ function atualizarContadores() {
     });
 }
 
-function abrirWhatsApp(tel, nome) {
-    const cleanTel = tel.replace(/\D/g, '');
-    const texto = `Olá ${nome}, tudo bem?`;
+function abrirWhatsApp(tel, nome, mensagemPersonalizada = null) {
+    const cleanTel = tel.toString().replace(/\D/g, '');
+    let texto = mensagemPersonalizada ? mensagemPersonalizada : `Olá ${nome}, tudo bem?`;
     window.open(`https://wa.me/55${cleanTel}?text=${encodeURIComponent(texto)}`, '_blank');
 }
 
@@ -255,7 +286,93 @@ function configurarBusca() {
     });
 }
 
-// --- FUNÇÕES DO DASHBOARD (CORRIGIDAS) ---
+// --- FUNÇÕES DE RETENÇÃO (CRM - MISSÕES DO DIA) ---
+
+function abrirPainelRetencao() {
+    const modal = new bootstrap.Modal(document.getElementById('modalRetencao'));
+    modal.show();
+
+    // Carrega dados
+    fetch(API_URL + '?op=missoes') // Chama o GET com parâmetro
+        .then(response => response.json())
+        .then(json => {
+            if(json.status === 'sucesso') {
+                renderizarRetencao(json.dados);
+            } else {
+                Swal.fire('Erro', 'Não foi possível carregar as missões.', 'error');
+            }
+        })
+        .catch(e => console.error(e));
+}
+
+function renderizarRetencao(dados) {
+    // 1. Aniversariantes
+    renderizarLista('lista-niver', dados.aniversariantes, 'badge-niver', (aluno) => {
+        return {
+            titulo: `${aluno.nome} 🎂`,
+            subtitulo: 'Faz aniversário hoje!',
+            msg: `Parabéns ${aluno.nome}! 🎉 Hoje é seu dia! Passando pra desejar muita saúde e muitos treinos. Venha comemorar com a gente!`
+        };
+    });
+
+    // 2. Ausentes
+    renderizarLista('lista-ausente', dados.ausentes, 'badge-ausente', (aluno) => {
+        return {
+            titulo: `${aluno.nome} 🏃`,
+            subtitulo: `Ausente há ${aluno.dias} dias`,
+            msg: `Oi ${aluno.nome}, sumiu da academia! 😅 Tá tudo bem? Estamos sentindo sua falta nos treinos. Bora voltar hoje?`
+        };
+    });
+
+    // 3. Cobrança (Vencidos)
+    renderizarLista('lista-vencido', dados.vencidos, 'badge-vencido', (aluno) => {
+        return {
+            titulo: `${aluno.nome} 💲`,
+            subtitulo: 'Mensalidade Vencida',
+            msg: `Olá ${aluno.nome}, tudo bem? Vi aqui que sua mensalidade venceu. Aconteceu algo? Segue o link pra regularizar e liberar a catraca: [LINK]`
+        };
+    });
+
+    // 4. Novos Alunos
+    renderizarLista('lista-novos', dados.novos, 'badge-novos', (aluno) => {
+        return {
+            titulo: `${aluno.nome} 🌱`,
+            subtitulo: 'Matriculou recentemente',
+            msg: `Oi ${aluno.nome}, seja bem-vindo(a) à família! 💪 Como foi seu primeiro treino? Se precisar de ajuda, pode me chamar aqui.`
+        };
+    });
+}
+
+function renderizarLista(elementId, lista, badgeId, templateFn) {
+    const container = document.getElementById(elementId);
+    const badge = document.getElementById(badgeId);
+    
+    container.innerHTML = '';
+    badge.innerText = lista.length;
+
+    if (lista.length === 0) {
+        container.innerHTML = '<div class="text-center text-muted p-4"><i class="fa-solid fa-check-circle fa-2x mb-2 text-success"></i><br>Tudo zerado por aqui!</div>';
+        return;
+    }
+
+    lista.forEach(aluno => {
+        const info = templateFn(aluno);
+        const div = document.createElement('div');
+        div.className = 'list-group-item d-flex justify-content-between align-items-center';
+        div.innerHTML = `
+            <div>
+                <h6 class="mb-0 fw-bold">${info.titulo}</h6>
+                <small class="text-muted">${info.subtitulo}</small>
+            </div>
+            <button class="btn btn-success btn-sm rounded-pill px-3" onclick="abrirWhatsApp('${aluno.telefone}', '${aluno.nome}', \`${info.msg}\`)">
+                <i class="fab fa-whatsapp"></i> Enviar
+            </button>
+        `;
+        container.appendChild(div);
+    });
+}
+
+// --- FUNÇÕES DO DASHBOARD ---
 
 let meuGrafico = null; 
 
@@ -265,7 +382,6 @@ function abrirDashboard() {
         return;
     }
     
-    // Agora que o HTML está corrigido, isso vai funcionar:
     try {
         calcularMetricas();
         const modal = new bootstrap.Modal(document.getElementById('modalDashboard'));
@@ -285,13 +401,10 @@ function calcularMetricas() {
     const mesAtual = new Date().getMonth();
 
     cacheLeads.forEach(lead => {
-        // Limpeza rigorosa do valor monetário
         let valorString = (lead.valor || '0').toString();
-        // Remove R$, pontos de milhar e troca vírgula por ponto
         valorString = valorString.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
         let valor = parseFloat(valorString) || 0;
         
-        // Contagem Status
         let status = lead.status || 'Novo';
         if (counts.hasOwnProperty(status)) counts[status]++;
         else {
