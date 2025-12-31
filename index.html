@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRM Kanban - EVO Integrado</title>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -14,117 +13,42 @@
     <nav class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container-fluid px-4">
             <span class="navbar-brand mb-0 h1"><i class="fa-solid fa-dumbbell text-warning me-2"></i>FitCRM</span>
-            
             <div class="d-flex ms-auto me-3">
                 <div class="input-group">
                     <span class="input-group-text bg-secondary border-0 text-white"><i class="fa-solid fa-search"></i></span>
                     <input type="text" id="filtro-busca" class="form-control bg-dark text-white border-0" placeholder="Buscar aluno..." style="--bs-bg-opacity: .2;">
                 </div>
             </div>
-
-            <button class="btn btn-info btn-sm me-2 text-white" onclick="abrirPainelRetencao()">
-                <i class="fa-solid fa-bullhorn"></i> Ações do Dia
-            </button>
-            <button class="btn btn-outline-light btn-sm me-2" onclick="abrirDashboard()">
-                <i class="fa-solid fa-chart-pie"></i> Dashboard
-            </button>
-            <button class="btn btn-warning btn-sm" onclick="abrirModalNovo()">
-                <i class="fa-solid fa-plus"></i> Novo Aluno
-            </button>
+            <button class="btn btn-info btn-sm me-2 text-white" onclick="abrirPainelRetencao()"><i class="fa-solid fa-bullhorn"></i> Ações do Dia</button>
+            <button class="btn btn-outline-light btn-sm me-2" onclick="abrirDashboard()"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+            <button class="btn btn-warning btn-sm" onclick="abrirModalNovo()"><i class="fa-solid fa-plus"></i> Novo Aluno</button>
         </div>
     </nav>
 
     <div class="container-fluid py-4 h-100">
         <div class="row flex-nowrap overflow-auto pb-4" id="kanban-container">
-            <div class="col-md-3 col-10">
-                <div class="kanban-column shadow-sm rounded-3 bg-white h-100">
-                    <div class="p-3 border-bottom border-3 border-primary d-flex justify-content-between align-items-center">
-                        <h6 class="fw-bold text-uppercase mb-0 text-primary">Novos Leads</h6>
-                        <span class="badge bg-primary rounded-pill count-badge">0</span>
-                    </div>
-                    <div class="kanban-list p-2" id="Novo" data-status="Novo"></div>
-                </div>
-            </div>
-
-            <div class="col-md-3 col-10">
-                <div class="kanban-column shadow-sm rounded-3 bg-white h-100">
-                    <div class="p-3 border-bottom border-3 border-warning d-flex justify-content-between align-items-center">
-                        <h6 class="fw-bold text-uppercase mb-0 text-warning">Em Contato</h6>
-                        <span class="badge bg-warning text-dark rounded-pill count-badge">0</span>
-                    </div>
-                    <div class="kanban-list p-2" id="Em Contato" data-status="Em Contato"></div>
-                </div>
-            </div>
-
-            <div class="col-md-3 col-10">
-                <div class="kanban-column shadow-sm rounded-3 bg-white h-100">
-                    <div class="p-3 border-bottom border-3 border-info d-flex justify-content-between align-items-center">
-                        <h6 class="fw-bold text-uppercase mb-0 text-info">Visita Agendada</h6>
-                        <span class="badge bg-info text-dark rounded-pill count-badge">0</span>
-                    </div>
-                    <div class="kanban-list p-2" id="Visita" data-status="Visita"></div>
-                </div>
-            </div>
-
-            <div class="col-md-3 col-10">
-                <div class="kanban-column shadow-sm rounded-3 bg-white h-100">
-                    <div class="p-3 border-bottom border-3 border-success d-flex justify-content-between align-items-center">
-                        <h6 class="fw-bold text-uppercase mb-0 text-success">Matriculado</h6>
-                        <span class="badge bg-success rounded-pill count-badge">0</span>
-                    </div>
-                    <div class="kanban-list p-2" id="Fechado" data-status="Fechado"></div>
-                </div>
-            </div>
+            <div class="col-md-3 col-10"><div class="kanban-column shadow-sm rounded-3 bg-white h-100"><div class="p-3 border-bottom border-3 border-primary d-flex justify-content-between align-items-center"><h6 class="fw-bold text-uppercase mb-0 text-primary">Novos Leads</h6><span class="badge bg-primary rounded-pill count-badge">0</span></div><div class="kanban-list p-2" id="Novo" data-status="Novo"></div></div></div>
+            <div class="col-md-3 col-10"><div class="kanban-column shadow-sm rounded-3 bg-white h-100"><div class="p-3 border-bottom border-3 border-warning d-flex justify-content-between align-items-center"><h6 class="fw-bold text-uppercase mb-0 text-warning">Em Contato</h6><span class="badge bg-warning text-dark rounded-pill count-badge">0</span></div><div class="kanban-list p-2" id="Em Contato" data-status="Em Contato"></div></div></div>
+            <div class="col-md-3 col-10"><div class="kanban-column shadow-sm rounded-3 bg-white h-100"><div class="p-3 border-bottom border-3 border-info d-flex justify-content-between align-items-center"><h6 class="fw-bold text-uppercase mb-0 text-info">Visita Agendada</h6><span class="badge bg-info text-dark rounded-pill count-badge">0</span></div><div class="kanban-list p-2" id="Visita" data-status="Visita"></div></div></div>
+            <div class="col-md-3 col-10"><div class="kanban-column shadow-sm rounded-3 bg-white h-100"><div class="p-3 border-bottom border-3 border-success d-flex justify-content-between align-items-center"><h6 class="fw-bold text-uppercase mb-0 text-success">Matriculado</h6><span class="badge bg-success rounded-pill count-badge">0</span></div><div class="kanban-list p-2" id="Fechado" data-status="Fechado"></div></div></div>
         </div>
     </div>
 
     <div class="modal fade" id="modalDetalhes" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Detalhes do Aluno</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
+                <div class="modal-header bg-primary text-white"><h5 class="modal-title">Detalhes</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-5 border-end">
                             <input type="hidden" id="edit-id">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Nome</label>
-                                <input type="text" id="edit-nome" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Telefone</label>
-                                <input type="text" id="edit-telefone" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Data de Nascimento</label>
-                                <input type="date" id="edit-nasc" class="form-control">
-                            </div>
-                            <div class="row">
-                                <div class="col-6 mb-3">
-                                    <label class="form-label fw-bold">Valor (R$)</label>
-                                    <input type="text" id="edit-valor" class="form-control">
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <label class="form-label fw-bold">Tag</label>
-                                    <input type="text" id="edit-tag" class="form-control">
-                                </div>
-                            </div>
-                            <button class="btn btn-success w-100" onclick="salvarEdicao()">
-                                <i class="fa-solid fa-save"></i> Salvar Dados
-                            </button>
+                            <div class="mb-3"><label class="fw-bold">Nome</label><input type="text" id="edit-nome" class="form-control"></div>
+                            <div class="mb-3"><label class="fw-bold">Telefone</label><input type="text" id="edit-telefone" class="form-control"></div>
+                            <div class="mb-3"><label class="fw-bold">Data Nasc.</label><input type="date" id="edit-nasc" class="form-control"></div>
+                            <div class="row"><div class="col-6 mb-3"><label class="fw-bold">Valor</label><input type="text" id="edit-valor" class="form-control"></div><div class="col-6 mb-3"><label class="fw-bold">Tag</label><input type="text" id="edit-tag" class="form-control"></div></div>
+                            <button class="btn btn-success w-100" onclick="salvarEdicao()">Salvar</button>
                         </div>
-                        <div class="col-md-7">
-                            <h6 class="fw-bold mb-3"><i class="fa-solid fa-history"></i> Histórico</h6>
-                            <div id="lista-historico" class="bg-light p-2 rounded mb-3 border" style="height: 250px; overflow-y: auto;">
-                                <p class="text-muted text-center mt-5">Nenhum histórico ainda.</p>
-                            </div>
-                            <div class="input-group">
-                                <input type="text" id="nova-nota" class="form-control" placeholder="Escreva uma nota...">
-                                <button class="btn btn-primary" onclick="adicionarNota()">Adicionar</button>
-                            </div>
-                        </div>
+                        <div class="col-md-7"><h6 class="fw-bold"><i class="fa-solid fa-history"></i> Histórico</h6><div id="lista-historico" class="bg-light p-2 rounded mb-3 border" style="height: 250px; overflow-y: auto;"></div><div class="input-group"><input type="text" id="nova-nota" class="form-control" placeholder="Nota..."><button class="btn btn-primary" onclick="adicionarNota()">Add</button></div></div>
                     </div>
                 </div>
             </div>
@@ -134,60 +58,19 @@
     <div class="modal fade" id="modalDashboard" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content bg-light">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-chart-line text-primary"></i> Visão Geral</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                <div class="modal-header border-0"><h5 class="modal-title fw-bold text-primary"><i class="fa-solid fa-chart-line"></i> Visão Geral</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
                     <div class="row mb-4">
-                        <div class="col-md-3">
-                            <div class="card border-0 shadow-sm p-3 text-center">
-                                <h6 class="text-muted text-uppercase" style="font-size: 0.8rem">Total de Alunos</h6>
-                                <h2 class="fw-bold text-dark" id="kpi-total">0</h2>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card border-0 shadow-sm p-3 text-center">
-                                <h6 class="text-muted text-uppercase" style="font-size: 0.8rem">Novos (Este Mês)</h6>
-                                <h2 class="fw-bold text-primary" id="kpi-novos">0</h2>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card border-0 shadow-sm p-3 text-center">
-                                <h6 class="text-muted text-uppercase" style="font-size: 0.8rem">Em Negociação (R$)</h6>
-                                <h2 class="fw-bold text-warning" id="kpi-negociacao">R$ 0</h2>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card border-0 shadow-sm p-3 text-center">
-                                <h6 class="text-muted text-uppercase" style="font-size: 0.8rem">Vendas Fechadas (R$)</h6>
-                                <h2 class="fw-bold text-success" id="kpi-vendas">R$ 0</h2>
-                            </div>
-                        </div>
+                        <div class="col-md-3"><div class="card border-0 shadow-sm p-3 text-center"><h6 class="text-muted small">Total</h6><h2 class="fw-bold" id="kpi-total">0</h2></div></div>
+                        <div class="col-md-3"><div class="card border-0 shadow-sm p-3 text-center"><h6 class="text-muted small">Novos (Mês)</h6><h2 class="fw-bold text-primary" id="kpi-novos">0</h2></div></div>
+                        <div class="col-md-3"><div class="card border-0 shadow-sm p-3 text-center"><h6 class="text-muted small">Em Negociação</h6><h2 class="fw-bold text-warning" id="kpi-negociacao">R$ 0</h2></div></div>
+                        <div class="col-md-3"><div class="card border-0 shadow-sm p-3 text-center"><h6 class="text-muted small">Vendas</h6><h2 class="fw-bold text-success" id="kpi-vendas">R$ 0</h2></div></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body">
-                                    <h6 class="fw-bold mb-3">Distribuição por Status</h6>
-                                    <div style="height: 250px; position: relative;">
-                                        <canvas id="graficoStatus"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body">
-                                    <h6 class="fw-bold mb-3">Meta Mensal (R$ 5.000,00)</h6>
-                                    <div class="progress" style="height: 30px;">
-                                        <div id="barra-meta" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%">0%</div>
-                                    </div>
-                                    <p class="text-muted mt-2 small">Faltam <span id="meta-falta" class="fw-bold">R$ 0,00</span> para bater a meta!</p>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="col-md-6 mb-3"><div class="card border-0 shadow-sm h-100"><div class="card-body"><h6 class="fw-bold mb-3">Funil</h6><div style="height: 250px;"><canvas id="graficoStatus"></canvas></div></div></div></div>
+                        <div class="col-md-6 mb-3"><div class="card border-0 shadow-sm h-100"><div class="card-header bg-white border-0"><h6 class="fw-bold mb-0"><i class="fa-solid fa-history text-primary"></i> Envios Recentes</h6></div><div class="card-body p-0"><div class="list-group list-group-flush" id="lista-dashboard-historico" style="max-height: 250px; overflow-y: auto;"></div></div></div></div>
                     </div>
+                    <div class="row mt-3"><div class="col-12"><div class="card border-0 shadow-sm"><div class="card-body"><h6 class="fw-bold mb-3">Meta (R$ 5.000)</h6><div class="progress" style="height: 30px;"><div id="barra-meta" class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 0%">0%</div></div><p class="text-muted mt-2 small">Faltam <span id="meta-falta" class="fw-bold">R$ 5.000</span></p></div></div></div></div>
                 </div>
             </div>
         </div>
@@ -196,21 +79,24 @@
     <div class="modal fade" id="modalRetencao" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-bullhorn"></i> Painel de Missões Diárias</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                <div class="modal-header bg-info text-white"><h5 class="modal-title fw-bold"><i class="fa-solid fa-bullhorn"></i> Ações do Dia</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
                     <ul class="nav nav-tabs nav-fill mb-3" id="tabRetencao" role="tablist">
-                        <li class="nav-item"><button class="nav-link active fw-bold" data-bs-toggle="tab" data-bs-target="#tab-niver" type="button">🎂 Aniversariantes <span id="badge-niver" class="badge bg-danger rounded-pill">0</span></button></li>
+                        <li class="nav-item"><button class="nav-link active fw-bold" data-bs-toggle="tab" data-bs-target="#tab-niver" type="button">🎂 Niver <span id="badge-niver" class="badge bg-danger rounded-pill">0</span></button></li>
                         <li class="nav-item"><button class="nav-link fw-bold" data-bs-toggle="tab" data-bs-target="#tab-ausente" type="button">🚨 Ausentes <span id="badge-ausente" class="badge bg-danger rounded-pill">0</span></button></li>
                         <li class="nav-item"><button class="nav-link fw-bold" data-bs-toggle="tab" data-bs-target="#tab-vencido" type="button">💲 Cobrança <span id="badge-vencido" class="badge bg-danger rounded-pill">0</span></button></li>
-                        <li class="nav-item"><button class="nav-link fw-bold" data-bs-toggle="tab" data-bs-target="#tab-novos" type="button">🌱 Novos Alunos <span id="badge-novos" class="badge bg-danger rounded-pill">0</span></button></li>
+                        <li class="nav-item"><button class="nav-link fw-bold" data-bs-toggle="tab" data-bs-target="#tab-novos" type="button">🌱 Novos <span id="badge-novos" class="badge bg-danger rounded-pill">0</span></button></li>
                     </ul>
-                    <div class="tab-content" id="tabContentRetencao">
-                        <div class="tab-pane fade show active" id="tab-niver"><div id="lista-niver" class="list-group"><p class="text-center text-muted mt-3">Carregando...</p></div></div>
-                        <div class="tab-pane fade" id="tab-ausente"><div id="lista-ausente" class="list-group"></div></div>
-                        <div class="tab-pane fade" id="tab-vencido"><div id="lista-vencido" class="list-group"></div></div>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tab-niver"><div id="lista-niver" class="list-group"><p class="text-center mt-3">Carregando...</p></div></div>
+                        <div class="tab-pane fade" id="tab-ausente">
+                            <div class="btn-group w-100 mb-3"><button class="btn btn-outline-dark active" onclick="filtrarLista('ausente','todos',this)">Todos</button><button class="btn btn-outline-warning" onclick="filtrarLista('ausente','2 dias',this)">2-4 Dias</button><button class="btn btn-outline-danger" onclick="filtrarLista('ausente','5 dias',this)">5-9 Dias</button><button class="btn btn-outline-dark" onclick="filtrarLista('ausente','10+ dias',this)">10+ Dias</button></div>
+                            <div id="lista-ausente" class="list-group"></div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-vencido">
+                            <div class="btn-group w-100 mb-3"><button class="btn btn-outline-dark active" onclick="filtrarLista('vencido','todos',this)">Todos</button><button class="btn btn-outline-info" onclick="filtrarLista('vencido','5 dias',this)">5-14 Dias</button><button class="btn btn-outline-primary" onclick="filtrarLista('vencido','15 dias',this)">15-29 Dias</button><button class="btn btn-outline-danger" onclick="filtrarLista('vencido','30+ dias',this)">30+ Dias</button></div>
+                            <div id="lista-vencido" class="list-group"></div>
+                        </div>
                         <div class="tab-pane fade" id="tab-novos"><div id="lista-novos" class="list-group"></div></div>
                     </div>
                 </div>
@@ -223,6 +109,5 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
-
 </body>
 </html>
